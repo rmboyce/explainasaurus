@@ -1,4 +1,5 @@
 import reflex as rx
+from website.state import State
 
 # react-pdf library
 class PdfLib(rx.Component):
@@ -26,55 +27,15 @@ page = PdfPage.create
 
 
 
-class PdfState(rx.State):
-    """The app state."""
-
-    # The pdf to render.
-    pdf: str
-
-    # is there an uploaded pdf?
-    uploaded: bool = False
-
-    # number of pages
-    num_pages: int = 0
-
-    # array of pages to display
-    display_pages: list[int] = [1, 2, 3]
-
-    # page width
-    width: int
-
-
-    async def handle_upload(self, files: list[rx.UploadFile]):
-        """Handle the upload of file(s).
-
-        Args:
-            files: The uploaded files.
-        """
-        for file in files:
-            upload_data = await file.read()
-            outfile = rx.get_upload_dir() / file.filename
-
-            # Save the file.
-            with outfile.open("wb") as file_object:
-                file_object.write(upload_data)
-
-            self.pdf = file.filename
-            self.uploaded = True
-
-    def update_width(self, width):
-        self.width = width
-
-
 pdf_upload_color = "rgb(107,99,246)"
 
 '''
 def on_load_success(num_pages: int):
-    PdfState.set_num_pages(num_pages)
-    rx.console_log(PdfState.num_pages)
+    State.set_num_pages(num_pages)
+    rx.console_log(State.num_pages)
     rx.call_script(
         "document.getElementById('pdfParent').offsetWidth",
-        callback=PdfState.update_width,
+        callback=State.update_width,
     ),
     return []'''
 
@@ -82,20 +43,20 @@ def on_load_success(num_pages: int):
 def pdf_upload():
     """The main view."""
     return rx.cond(
-        PdfState.uploaded,
+        State.uploaded,
         rx.vstack(
             rx.center(
-                rx.heading(PdfState.pdf),
+                rx.heading(State.pdf),
                 width="100%",
                 padding="1em"
             ),
             document(
                 rx.foreach(
-                    PdfState.display_pages,
+                    State.display_pages,
                     lambda i: page(page_number=i, width=1200)
                 ),
-                file=rx.get_upload_url(PdfState.pdf),
-                #on_load_success=PdfState.set_num_pages
+                file=rx.get_upload_url(State.pdf),
+                #on_load_success=State.set_num_pages
             ),
             id="pdfParent"
         ),
@@ -115,7 +76,7 @@ def pdf_upload():
             },
             disabled=False,
             on_keyboard=True,
-            on_drop=PdfState.handle_upload(rx.upload_files(upload_id="upload")),
+            on_drop=State.handle_upload(rx.upload_files(upload_id="upload")),
             border=f"1px dotted {pdf_upload_color}",
             padding="5em",
             margin="5em"

@@ -81,7 +81,14 @@ def navbar():
     return rx.box(
         rx.hstack(
             rx.hstack(
-                rx.heading("Explainasaurus", color=rx.color("indigo", 1)),
+                rx.button(
+                    rx.heading(
+                        "Explainasaurus",
+                        color=rx.color("indigo", 1),
+                    ),
+                    on_click=State.set_uploaded(False),
+                    background_color=rx.color("mauve", 11)
+                ),
                 align_items="center",
             ),
             rx.hstack(

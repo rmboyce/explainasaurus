@@ -134,3 +134,41 @@ class State(rx.State):
 
         # Toggle the processing flag.
         self.processing = False
+
+    
+    ### PDF STATE ###
+    # The pdf to render.
+    pdf: str
+
+    # is there an uploaded pdf?
+    uploaded: bool = False
+
+    # number of pages
+    num_pages: int = 0
+
+    # array of pages to display
+    display_pages: list[int] = [1, 2, 3]
+
+    # page width
+    width: int
+
+
+    async def handle_upload(self, files: list[rx.UploadFile]):
+        """Handle the upload of file(s).
+
+        Args:
+            files: The uploaded files.
+        """
+        for file in files:
+            upload_data = await file.read()
+            outfile = rx.get_upload_dir() / file.filename
+
+            # Save the file.
+            with outfile.open("wb") as file_object:
+                file_object.write(upload_data)
+
+            self.pdf = file.filename
+            self.uploaded = True
+
+    def update_width(self, width):
+        self.width = width
