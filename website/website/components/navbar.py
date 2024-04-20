@@ -81,15 +81,7 @@ def navbar():
     return rx.box(
         rx.hstack(
             rx.hstack(
-                rx.avatar(fallback="RC", variant="solid"),
-                rx.heading("Reflex Chat"),
-                rx.desktop_only(
-                    rx.badge(
-                    State.current_chat,
-                    rx.tooltip(rx.icon("info", size=14), content="The current selected chat."),
-                    variant="soft"
-                    )
-                ),
+                rx.heading("Explainasaurus", color=rx.color("indigo", 1)),
                 align_items="center",
             ),
             rx.hstack(
@@ -100,16 +92,7 @@ def navbar():
                             tag="messages-square",
                             color=rx.color("mauve", 12),
                         ),
-                        background_color=rx.color("mauve", 6),
-                    )
-                ),
-                rx.desktop_only(
-                    rx.button(
-                        rx.icon(
-                            tag="sliders-horizontal",
-                            color=rx.color("mauve", 12),
-                        ),
-                        background_color=rx.color("mauve", 6),
+                        background_color=rx.color("mauve", 8),
                     )
                 ),
                 align_items="center",
@@ -120,8 +103,8 @@ def navbar():
         backdrop_filter="auto",
         backdrop_blur="lg",
         padding="12px",
-        border_bottom=f"1px solid {rx.color('mauve', 3)}",
-        background_color=rx.color("mauve", 2),
+        border_bottom=f"1px solid {rx.color('mauve', 6)}",
+        background_color=rx.color("mauve", 11),
         position="sticky",
         top="0",
         z_index="100",
