@@ -1,7 +1,7 @@
 """The main Chat app."""
 
 import reflex as rx
-from website.components import chat, navbar
+from website.components import chat, navbar, pdf
 
 
 def index() -> rx.Component:
@@ -10,6 +10,7 @@ def index() -> rx.Component:
         navbar(),
         chat.chat(),
         chat.action_bar(),
+        pdf.pdf_upload(),
         background_color=rx.color("mauve", 1),
         color=rx.color("mauve", 12),
         min_height="100vh",

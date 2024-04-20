@@ -9,6 +9,7 @@
 **/package.json
 *.db
 *.py[cod]
+.venv/
 .vscode
 .web
 __pycache__/
@@ -18,4 +19,4 @@ dist/*
 frontend.zip
 poetry.lock
 venv/
-.venv/
+uploaded_files/
