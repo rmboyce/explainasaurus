@@ -1,0 +1,21 @@
+{
+  "name": "Explainr",
+  "action": {},
+  "manifest_version": 3,
+  "version": "0.1",
+  "description": "Learning about health made easy!",
+  "permissions": ["activeTab", "scripting"],
+  "web_accessible_resources": [{
+    "resources": ["save.png", "delete.png"],
+    "matches": ["<all_urls>", "<all_urls>"]
+  }],
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
