@@ -9,8 +9,7 @@ def index() -> rx.Component:
     return rx.chakra.vstack(
         navbar(),
         pdf.pdf_upload(),
-        background_color=rx.color("mauve", 12),
-        color=rx.color("mauve", 1),
+        color_scheme="slate",
         min_height="100vh",
         align_items="stretch",
         spacing="0",

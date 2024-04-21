@@ -20,8 +20,8 @@ def message(qa: QA) -> rx.Component:
         rx.box(
             rx.markdown(
                 qa.question,
-                background_color=rx.color("mauve", 4),
-                color=rx.color("mauve", 12),
+                background_color=rx.color("slate", 4),
+                color=rx.color("slate", 12),
                 **message_style,
             ),
             text_align="right",
@@ -95,7 +95,7 @@ def action_bar() -> rx.Component:
                 "ReflexGPT may return factually incorrect or misleading responses. Use discretion.",
                 text_align="center",
                 font_size=".75em",
-                color=rx.color("mauve", 10),
+                color=rx.color("slate", 10),
             ),
             rx.logo(margin_top="-1em", margin_bottom="-1em"),
             align_items="center",
@@ -106,8 +106,8 @@ def action_bar() -> rx.Component:
         padding_y="16px",
         backdrop_filter="auto",
         backdrop_blur="lg",
-        border_top=f"1px solid {rx.color('mauve', 3)}",
-        background_color=rx.color("mauve", 2),
+        border_top=f"1px solid {rx.color('slate', 3)}",
+        background_color=rx.color("slate", 2),
         align_items="stretch",
         width="100%",
     )
