@@ -9,7 +9,7 @@ def index() -> rx.Component:
     return rx.chakra.vstack(
         navbar(),
         pdf.pdf_upload(),
-        rx.cond(State.summary != "", rx.text(State.summary )),
+        rx.cond(State.summary != "", rx.text(State.summary)),
         rx.cond(State.relativearticles != "", rx.text(State.relativearticles)),
         color_scheme="slate",
         min_height="100vh",
