@@ -117,7 +117,7 @@ document.addEventListener('mouseup', (event) => {
 
     // TODO: uncomment this once we want to generate the actual text
     const prompt = "Your task is to simplify the following text about Alzheimer's disease. Aim to convey the essential information in a clear and concise way, using fewer words than the original text. A non professional should be able to understand the response. Do not introduce any new information or change the meaning of the text. Do not include any special formatting like bold or italics in your response. Here is the text to simplify:\n"+selectedText;
-    fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyCQHLZBNZws5jvxIRP1oIEkAiVaVoiInoI', {
+    fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

@@ -4,10 +4,11 @@ from fastapi import Request
 from pydantic import BaseModel
 import requests
 import json
+import re
 
 history = []
 
-API_KEY = "AIzaSyCQHLZBNZws5jvxIRP1oIEkAiVaVoiInoI"
+
 
 # Define a Pydantic model for the request body
 class Item(BaseModel):
@@ -31,6 +32,8 @@ class State(rx.State):
     summary: str = ""
 
     relativearticles: str = ""
+
+    articleslist: list[str] = []
 
     def shistory_toggle_checked(self, index: int):
         self.shistory[index]["checked"] = not self.shistory[index]["checked"]
@@ -67,7 +70,7 @@ class State(rx.State):
 
     def generate_relativearticles(self):
         self.relativearticles = "thinking..."
-        article_prompt = "You are a helpful AI assistant summarizing information about Alzheimer's disease. You will be provided with several text excerpts related to Alzheimer's. Your task is to combine the key points from these texts and find 3 related articles about the subject. The articles should appear in a list with one newline between each of them. The format for the links should be: '[Article name]: [url]'. Do not include any special formatting like bold or italics in your response. Focus on on finding relevant and recent articles. Here are the input texts, they are seperated by a newline:\n"
+        article_prompt = "You are a helpful AI assistant summarizing information about Alzheimer's disease. You will be provided with several text excerpts related to Alzheimer's. Your task is to combine the key points from these texts and find 3 related articles about the subject. The articles should appear in a list with one newline between each of them. The format for the links should be: '[ARTICLE_NAME]: [URL]'. Also add the number before every line followed by a period. Do not include any special formatting like bold or italics in your response. Focus on on finding relevant and recent articles, and do not including anything in the response apart from the articles. Here are the input texts, they are separated by a newline:\n"
         for summary in self.shistory:
             if(summary["checked"]):
                 article_prompt += summary["response"]
@@ -91,6 +94,8 @@ class State(rx.State):
             rx.console_log(response_data)
             resp = response_data['candidates'][0]['content']['parts'][0]['text']
             self.relativearticles = resp.encode('utf-8').decode('unicode-escape')
+            self.articleslist = re.split('[0-9]\.', self.relativearticles)
+            self.relativearticles = "\n".join(re.split('[0-9]\.', self.relativearticles))
             rx.console_log(self.summary)
         else:
             print('Error:', response.status_code)

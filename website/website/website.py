@@ -22,7 +22,7 @@ def index() -> rx.Component:
                 rx.box(
                     rx.vstack(
                         rx.text("Similar articles", font_weight="bold"),
-                        rx.text(State.relativearticles),
+                        rx.foreach(State.articleslist, lambda x : rx.text(x)),
                         padding="1.4em",
                         margin="3em",
                         border="1px dashed rgb(107,99,246)",
