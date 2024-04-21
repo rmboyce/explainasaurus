@@ -75,6 +75,7 @@ document.addEventListener('mouseup', (event) => {
     boxButtonContainer.style.width = "90%"
     box.appendChild(boxButtonContainer);
 
+    var explanation = document.createElement("div");
     var saveBoxButton = document.createElement("div");
     saveBoxButton.style.height = boxHeight;
     saveBoxButton.style.width = boxHeight;
@@ -82,7 +83,7 @@ document.addEventListener('mouseup', (event) => {
     saveBoxButton.style.float = "left";
     saveBoxButton.addEventListener("click", function() {
       console.log("save it");
-      saveToDB(selectedText, "definitely an easier explanation")
+      saveToDB(selectedText, explanation.innerText)
     });
     boxButtonContainer.appendChild(saveBoxButton);
 
@@ -110,35 +111,34 @@ document.addEventListener('mouseup', (event) => {
     deleteIcon.style.margin = "0px";
     deleteBoxButton.appendChild(deleteIcon);
 
-    var explanation = document.createElement("div");
     explanation.innerText = "thinking..."; //selectedText;
     explanation.style.margin = "15px";
     box.appendChild(explanation);
 
     // TODO: uncomment this once we want to generate the actual text
-//     const prompt = "Please explain the following text as if you were talking to a 15 year old, making sure your response is strictly the explanation and approximately matches the input text length. Here is the input text:\n"+selectedText;
-//     fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=[API_KEY]', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify({
-//       contents: [{
-//         parts: [{
-//           text: prompt
-//         }]
-//       }]
-//     })
-//   })
-//   .then(response => response.json())
-//       .then(data => {
-//         // Process the response data
-//         console.log(data);
-//         explanation.innerText = data["candidates"][0]["content"]["parts"][0]["text"]
-//     })
-//     .catch(error => {
-//       // Handle errors
-//       console.error('Error:', error);
-//     });
+    const prompt = "Your task is to simplify the following text about Alzheimer's disease. Aim to convey the essential information in a clear and concise way, using fewer words than the original text. A non professional should be able to understand the response. Do not introduce any new information or change the meaning of the text. Do not include any special formatting like bold or italics in your response. Here is the text to simplify:\n"+selectedText;
+    fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyCQHLZBNZws5jvxIRP1oIEkAiVaVoiInoI', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      contents: [{
+        parts: [{
+          text: prompt
+        }]
+      }]
+    })
+  })
+  .then(response => response.json())
+      .then(data => {
+        // Process the response data
+        console.log(data);
+        explanation.innerText = data["candidates"][0]["content"]["parts"][0]["text"]
+    })
+    .catch(error => {
+      // Handle errors
+      console.error('Error:', error);
+    });
   }
 });

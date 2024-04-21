@@ -4,6 +4,12 @@
   "manifest_version": 3,
   "version": "0.1",
   "description": "Learning about health made easy!",
+  "icons": {
+    "16": "dino16.jpeg",
+    "32": "dino32.jpeg",
+    "48": "dino48.jpeg",
+    "128": "dino128.jpeg"
+  },
   "permissions": [
     "activeTab",
     "scripting",
@@ -15,7 +21,7 @@
     "https://*/*"
   ],
   "web_accessible_resources": [{
-    "resources": ["save.png", "delete.png"],
+    "resources": ["save.png", "delete.png", "dino16.jpeg", "dino32.jpeg", "dino48.jpeg", "dino128.jpeg"],
     "matches": ["<all_urls>", "<all_urls>"]
   }],
   "background": {

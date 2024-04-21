@@ -2,6 +2,8 @@ import os
 import reflex as rx
 from fastapi import Request
 from pydantic import BaseModel
+import requests
+import json
 
 history = []
 
@@ -21,6 +23,7 @@ DEFAULT_CHATS = {
     "Intros": [],
 }
 
+API_KEY = "AIzaSyCQHLZBNZws5jvxIRP1oIEkAiVaVoiInoI"
 
 # Define a Pydantic model for the request body
 class Item(BaseModel):
@@ -70,10 +73,64 @@ class State(rx.State):
         rx.console_log(self.summarylist)
 
     def generate_summary(self):
-        self.summary = "GENERATED"
+        self.summary = "thinking..."
+        return
+        summary_prompt = "You are a helpful AI assistant summarizing information about Alzheimer's disease. You will be provided with several text excerpts related to Alzheimer's. Your task is to combine the key points from these texts into a single, concise summary. The summary should be easy to understand and should not be longer than the combined length of the input texts. Do not include any special formatting like bold or italics in your response. Focus on presenting a clear and informative overview of the disease based on the provided information. Here are the input texts, they are seperated by a newline:\n"
+        for summary in self.summarylist:
+            summary_prompt += summary
+            summary_prompt += "\n"
+        url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key='+API_KEY
+        headers = {'Content-Type': 'application/json'}
+        data = {
+            'contents': [
+                {
+                    'parts': [
+                        {
+                            'text': summary_prompt
+                        }
+                    ]
+                }
+            ]
+        }
+        response = requests.post(url, headers=headers, data=json.dumps(data))
+        if response.status_code == 200:
+            response_data = response.json()
+            rx.console_log(response_data)
+            resp = response_data['candidates'][0]['content']['parts'][0]['text']
+            self.summary = resp.encode('utf-8').decode('unicode-escape')
+            rx.console_log(self.summary)
+        else:
+            print('Error:', response.status_code)
 
     def generate_relativearticles(self):
-        self.relativearticles = "GENERATED"
+        self.relativearticles = "thinking..."
+        return
+        article_prompt = "You are a helpful AI assistant summarizing information about Alzheimer's disease. You will be provided with several text excerpts related to Alzheimer's. Your task is to combine the key points from these texts and find 3 related articles about the subject. The articles should appear in a list with one newline between each of them. The format for the links should be: '[Article name]: [url]'. Do not include any special formatting like bold or italics in your response. Focus on on finding relevant and recent articles. Here are the input texts, they are seperated by a newline:\n"
+        for summary in self.summarylist:
+            article_prompt += summary
+            article_prompt += "\n"
+        url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key='+API_KEY
+        headers = {'Content-Type': 'application/json'}
+        data = {
+            'contents': [
+                {
+                    'parts': [
+                        {
+                            'text': article_prompt
+                        }
+                    ]
+                }
+            ]
+        }
+        response = requests.post(url, headers=headers, data=json.dumps(data))
+        if response.status_code == 200:
+            response_data = response.json()
+            rx.console_log(response_data)
+            resp = response_data['candidates'][0]['content']['parts'][0]['text']
+            self.relativearticles = resp.encode('utf-8').decode('unicode-escape')
+            rx.console_log(self.summary)
+        else:
+            print('Error:', response.status_code)
 
     @rx.var
     def empty_list(self) -> bool:
