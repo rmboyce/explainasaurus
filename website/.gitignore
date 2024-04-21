@@ -18,5 +18,5 @@ bun.lockb
 dist/*
 frontend.zip
 poetry.lock
-venv/
 uploaded_files/
+venv/

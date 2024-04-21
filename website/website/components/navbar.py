@@ -1,28 +1,17 @@
 import reflex as rx
 from website.state import State
 
-def sidebar_chat(chat: str) -> rx.Component:
+
+def sidebar_chat(hist: str) -> rx.Component:
     """A sidebar chat item.
 
     Args:
         chat: The chat item.
     """
-    return  rx.drawer.close(rx.hstack(
-        rx.button(
-            chat, on_click=lambda: State.set_chat(chat), width="80%", variant="surface"
-        ),
-        rx.button(
-            rx.icon(
-                tag="trash",
-                on_click=State.delete_chat,
-                stroke_width=1,
-            ),
-            width="20%",
-            variant="surface",
-            color_scheme="red",
-        ),
-        width="100%",
-    ))
+    return  rx.drawer.close(rx.vstack(
+        rx.text(hist["link"]),
+        rx.text(hist["selected"]),
+        rx.text(hist["response"])))
 
 
 def sidebar(trigger) -> rx.Component:
@@ -34,15 +23,15 @@ def sidebar(trigger) -> rx.Component:
             rx.drawer.content(
                 rx.vstack(
                     rx.heading("Chats", color=rx.color("mauve", 11)),
-                    rx.divider(),
-                    rx.foreach(State.chat_titles, lambda chat: sidebar_chat(chat)),
+                    rx.divider(size="4"),
+                    rx.foreach(State.shistory, lambda hist: sidebar_chat(hist)),
                     align_items="stretch",
                     width="100%",
                 ),
                 top="auto",
                 right="auto",
                 height="100%",
-                width="20em",
+                width="90%",
                 padding="2em",
                 background_color=rx.color("mauve", 2),
                 outline="none",
@@ -100,6 +89,7 @@ def navbar():
                             color=rx.color("mauve", 12),
                         ),
                         background_color=rx.color("mauve", 8),
+                        on_click=State.set_hist(),
                     )
                 ),
                 align_items="center",

@@ -4,13 +4,40 @@ let sidepanelActive = false;
 let mouseStartX;
 let mouseStartY;
 
+// Save to DB
+function saveToDB(text, response) {
+  const link = window.location.toString()
+  const data = {link: link, selected: text, response: response}
+  const body = JSON.stringify(data);
+
+  fetch("http://localhost:8000/add_expl/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: body
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log("Response data:", data);
+  })
+  .catch(error => {
+    console.error("Error:", error);
+  });
+}
+
 document.addEventListener('selectionchange', () => {
-  if(!sidepanelActive) {
-    const exampleDiv = document.getElementById('explainer_container');
-    sidepanelActive = (exampleDiv !== null);
-    console.log(sidepanelActive);
-  }
-  if(sidepanelActive) {
+//   if(!sidepanelActive) {
+//     const exampleDiv = document.getElementById('sidepanel');
+//     sidepanelActive = (exampleDiv !== null);
+//     console.log(sidepanelActive);
+//   }
+  if(document.getElementById('sidepanel') !== null) {
     const selectedText = window.getSelection().toString();
       if (selectedText && !selectionStarted) {
         selectionStarted = true;
@@ -54,7 +81,8 @@ document.addEventListener('mouseup', (event) => {
     saveBoxButton.style.backgroundColor = "white";
     saveBoxButton.style.float = "left";
     saveBoxButton.addEventListener("click", function() {
-        console.log("save it");
+      console.log("save it");
+      saveToDB(selectedText, "definitely an easier explanation")
     });
     boxButtonContainer.appendChild(saveBoxButton);
 

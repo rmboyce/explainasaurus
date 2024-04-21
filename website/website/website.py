@@ -2,7 +2,7 @@
 
 import reflex as rx
 from website.components import navbar, pdf
-
+from website.state import api_test
 
 def index() -> rx.Component:
     """The main app."""
@@ -16,7 +16,6 @@ def index() -> rx.Component:
         spacing="0",
     )
 
-
 # Add state and page to the app.
 app = rx.App(
     theme=rx.theme(
@@ -25,3 +24,4 @@ app = rx.App(
     ),
 )
 app.add_page(index)
+app.api.add_api_route("/add_expl/", api_test, methods=["POST"])

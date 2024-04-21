@@ -1,7 +1,9 @@
 import os
 import reflex as rx
-#from openai import OpenAI
+from fastapi import Request
+from pydantic import BaseModel
 
+history = []
 
 # Checking if the API key is set properly
 if not os.getenv("OPENAI_API_KEY"):
@@ -20,6 +22,16 @@ DEFAULT_CHATS = {
 }
 
 
+# Define a Pydantic model for the request body
+class Item(BaseModel):
+    link: str
+    selected: str
+    response: str
+
+async def api_test(item: Item):
+    history.append({"link": item.link, "selected": item.selected, "response": item.response})
+    return {"link": item.link, "selected": item.selected}
+
 class State(rx.State):
     """The app state."""
 
@@ -37,6 +49,19 @@ class State(rx.State):
 
     # The name of the new chat.
     new_chat_name: str = ""
+
+    # history of explanations
+    shistory : list[dict[str, str]]= []
+
+    # new explanation
+    expl = "Default expl"
+
+    def set_hist(self):
+        self.shistory = history
+
+    def add_explanation(self):
+        # rx.console_log("in stuff"+new_explanation)
+        self.history.append(self.expl)
 
     def create_chat(self):
         """Create a new chat."""

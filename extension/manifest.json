@@ -4,7 +4,16 @@
   "manifest_version": 3,
   "version": "0.1",
   "description": "Learning about health made easy!",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "tabs",
+    "http://localhost/*"
+  ],
+  "host_permission" : [
+    "http://*/*",
+    "https://*/*"
+  ],
   "web_accessible_resources": [{
     "resources": ["save.png", "delete.png"],
     "matches": ["<all_urls>", "<all_urls>"]
