@@ -1,23 +1,34 @@
 import reflex as rx
 from website.state import State
 
-def sidebar_chat(hist: str) -> rx.Component:
+def sidebar_chat(hist: str, index: int) -> rx.Component:
     """A sidebar chat item.
 
     Args:
         chat: The chat item.
     """
-    return rx.vstack(
-        rx.checkbox(
-          spacing="2",
-          on_change=lambda x : State.change_summary(x, hist["response"])
+    return rx.cond(
+        hist["checked"],
+        rx.vstack(
+            rx.hstack(rx.text("link:", font_weight="bold"), rx.text(hist["link"]),),
+            rx.hstack(rx.text("text:", font_weight="bold"), rx.text(hist["selected"]),),
+            rx.hstack(rx.text("explanation:", font_weight="bold"), rx.text(hist["response"]),),
+            on_click=State.shistory_toggle_checked(index),
+            background_color=rx.color("indigo", 4),
+            border="2px solid black",
+            border_radius="10px",
+            padding="20px"
         ),
-        rx.hstack(rx.text("link:", font_weight="bold"), rx.text(hist["link"]),),
-        rx.hstack(rx.text("text:", font_weight="bold"), rx.text(hist["selected"]),),
-        rx.hstack(rx.text("explanation:", font_weight="bold"), rx.text(hist["response"]),),
-        border="2px solid black",
-        border_radius="10px",
-        padding="20px")
+        rx.vstack(
+            rx.hstack(rx.text("link:", font_weight="bold"), rx.text(hist["link"]),),
+            rx.hstack(rx.text("text:", font_weight="bold"), rx.text(hist["selected"]),),
+            rx.hstack(rx.text("explanation:", font_weight="bold"), rx.text(hist["response"]),),
+            on_click=State.shistory_toggle_checked(index),
+            border="2px solid black",
+            border_radius="10px",
+            padding="20px"
+        )
+    )
 
 
 def sidebar(trigger) -> rx.Component:
@@ -30,8 +41,27 @@ def sidebar(trigger) -> rx.Component:
                 rx.vstack(
                     rx.heading("History", color=rx.color("slate", 11)),
                     rx.divider(size="4"),
-                    rx.hstack(rx.drawer.close(rx.button("find similar articles", on_click=State.generate_relativearticles(), disabled=State.empty_list), float="left"), rx.drawer.close(rx.button("generate summary", on_click=State.generate_summary(), disabled=State.empty_list), float="right"), width="100%", display="block"),
-                    rx.foreach(State.shistory, lambda hist: sidebar_chat(hist)),
+                    rx.hstack(
+                        rx.drawer.close(
+                            rx.button(
+                                "find similar articles",
+                                on_click=State.generate_relativearticles(),
+                                disabled=State.shistory_none_checked
+                            ),
+                            float="left"
+                        ),
+                        rx.drawer.close(
+                            rx.button(
+                                "generate summary",
+                                on_click=State.generate_summary(),
+                                disabled=State.shistory_none_checked
+                            ),
+                            float="right"
+                        ),
+                        width="100%",
+                        display="block"
+                    ),
+                    rx.foreach(State.shistory, lambda hist, index: sidebar_chat(hist, index)),
                     align_items="stretch",
                     width="100%",
                     overflow_y="auto"
@@ -89,11 +119,10 @@ def navbar():
                 align_items="center",
             ),
             rx.hstack(
-                modal(rx.button("+ New chat")),
                 sidebar(
                     rx.button(
                         rx.icon(
-                            tag="messages-square",
+                            tag="history",
                         ),
                         on_click=State.set_hist(),
                     )

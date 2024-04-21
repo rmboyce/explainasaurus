@@ -36,7 +36,7 @@ function addSidePage() {
     // explainerContainer.style.display = "flex";
     // existingContentWrapper.style.width = "67%";
 
-    sidePanel.style.width = "100%";
+    sidePanel.style.width = "calc(100% - 3px)";
     sidePanel.style.border = "2px solid black";
     sidePanel.style.display = "flex";
     sidePanel.style.justifyContent = "center";
