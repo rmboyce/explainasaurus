@@ -109,9 +109,13 @@ def navbar():
         rx.hstack(
             rx.hstack(
                 rx.button(
-                    rx.heading(
-                        "Explainasaurus",
-                        color=rx.color("indigo", 1),
+                    rx.hstack( 
+                        rx.image(src="/dino.png",width="50px", height="50px", border_radius="50%"),
+                        rx.heading(
+                            "Explainasaurus",
+                            color=rx.color("indigo", 1),
+                        ),
+                        align_items="center",
                     ),
                     on_click=State.set_uploaded(False),
                     background_color=rx.color("slate", 10)

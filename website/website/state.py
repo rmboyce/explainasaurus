@@ -7,6 +7,7 @@ import json
 
 history = []
 
+API_KEY = "AIzaSyCQHLZBNZws5jvxIRP1oIEkAiVaVoiInoI"
 
 # Define a Pydantic model for the request body
 class Item(BaseModel):
@@ -36,11 +37,11 @@ class State(rx.State):
 
     def generate_summary(self):
         self.summary = "thinking..."
-        return
         summary_prompt = "You are a helpful AI assistant summarizing information about Alzheimer's disease. You will be provided with several text excerpts related to Alzheimer's. Your task is to combine the key points from these texts into a single, concise summary. The summary should be easy to understand and should not be longer than the combined length of the input texts. Do not include any special formatting like bold or italics in your response. Focus on presenting a clear and informative overview of the disease based on the provided information. Here are the input texts, they are seperated by a newline:\n"
-        for summary in self.summarylist:
-            summary_prompt += summary
-            summary_prompt += "\n"
+        for summary in self.shistory:
+            if(summary["checked"]):
+                summary_prompt += summary["response"]
+                summary_prompt += "\n"
         url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key='+API_KEY
         headers = {'Content-Type': 'application/json'}
         data = {
@@ -66,11 +67,11 @@ class State(rx.State):
 
     def generate_relativearticles(self):
         self.relativearticles = "thinking..."
-        return
         article_prompt = "You are a helpful AI assistant summarizing information about Alzheimer's disease. You will be provided with several text excerpts related to Alzheimer's. Your task is to combine the key points from these texts and find 3 related articles about the subject. The articles should appear in a list with one newline between each of them. The format for the links should be: '[Article name]: [url]'. Do not include any special formatting like bold or italics in your response. Focus on on finding relevant and recent articles. Here are the input texts, they are seperated by a newline:\n"
-        for summary in self.summarylist:
-            article_prompt += summary
-            article_prompt += "\n"
+        for summary in self.shistory:
+            if(summary["checked"]):
+                article_prompt += summary["response"]
+                article_prompt += "\n"
         url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key='+API_KEY
         headers = {'Content-Type': 'application/json'}
         data = {

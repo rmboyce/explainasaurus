@@ -5,10 +5,7 @@
   "version": "0.1",
   "description": "Learning about health made easy!",
   "icons": {
-    "16": "dino16.jpeg",
-    "32": "dino32.jpeg",
-    "48": "dino48.jpeg",
-    "128": "dino128.jpeg"
+    "48": "dino48.png"
   },
   "permissions": [
     "activeTab",
@@ -21,7 +18,7 @@
     "https://*/*"
   ],
   "web_accessible_resources": [{
-    "resources": ["save.png", "delete.png", "dino16.jpeg", "dino32.jpeg", "dino48.jpeg", "dino128.jpeg"],
+    "resources": ["save.png", "delete.png", "dino16.png", "dino32.png", "dino48.png", "dino128.png"],
     "matches": ["<all_urls>", "<all_urls>"]
   }],
   "background": {
