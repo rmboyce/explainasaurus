@@ -171,9 +171,6 @@ class State(rx.State):
     # number of pages
     num_pages: int = 0
 
-    # array of pages to display
-    display_pages: list[int] = [1, 2, 3]
-
     # page width
     width: int
 
@@ -197,3 +194,7 @@ class State(rx.State):
 
     def update_width(self, width):
         self.width = width
+    
+    @rx.var
+    def get_page_numbers(self) -> list[int]:
+        return [i+1 for i in range(self.num_pages)]

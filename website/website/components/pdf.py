@@ -15,7 +15,13 @@ class PdfLib(rx.Component):
 class PdfDocument(PdfLib):
     tag = "Document"
     file: rx.Var[str]
-    on_load_success: rx.EventHandler[lambda e0: [e0]]
+    def get_event_triggers(self) -> dict[str, rx.Var]:
+        """Dict mapping (event -> expected arguments)."""
+
+        return {
+            **super().get_event_triggers(),
+            "on_load_success": lambda e0: [rx.Var.create("_e0?.numPages", _var_is_local=False)],
+        }
 
 class PdfPage(PdfLib):
     tag = "Page"
@@ -25,19 +31,12 @@ class PdfPage(PdfLib):
 document = PdfDocument.create
 page = PdfPage.create
 
+class SizeMe(rx.Component):
+    library = "react-sizeme"
+    tag = "SizeMe"
 
 
 pdf_upload_color = "rgb(107,99,246)"
-
-'''
-def on_load_success(num_pages: int):
-    State.set_num_pages(num_pages)
-    rx.console_log(State.num_pages)
-    rx.call_script(
-        "document.getElementById('pdfParent').offsetWidth",
-        callback=State.update_width,
-    ),
-    return []'''
 
 
 def pdf_upload():
@@ -52,33 +51,30 @@ def pdf_upload():
             ),
             document(
                 rx.foreach(
-                    State.display_pages,
+                    State.get_page_numbers,
                     lambda i: page(page_number=i, width=1200)
                 ),
                 file=rx.get_upload_url(State.pdf),
-                #on_load_success=State.set_num_pages
+                on_load_success=State.set_num_pages
             ),
             id="pdfParent"
         ),
-        rx.upload(
-            rx.vstack(
-                rx.button("Select File"),
-                rx.text("Drag and drop files here or click to select files"),
+        rx.box(
+            rx.upload(
+                rx.center(
+                    #rx.button("Select File"),
+                    rx.text("Drag and drop files here or click to select files!"),
+                ),
+                id="upload",
+                accept = {
+                    "application/pdf": [".pdf"]
+                },
+                disabled=False,
+                on_keyboard=True,
+                on_drop=State.handle_upload(rx.upload_files(upload_id="upload")),
+                border=f"1px dotted {pdf_upload_color}",
+                padding="3em"
             ),
-            id="upload",
-            accept = {
-                "application/pdf": [".pdf"],
-                "image/png": [".png"],
-                "image/jpeg": [".jpg", ".jpeg"],
-                "image/gif": [".gif"],
-                "image/webp": [".webp"],
-                "text/html": [".html", ".htm"],
-            },
-            disabled=False,
-            on_keyboard=True,
-            on_drop=State.handle_upload(rx.upload_files(upload_id="upload")),
-            border=f"1px dotted {pdf_upload_color}",
-            padding="5em",
-            margin="5em"
-        ),
+            padding="3em"
+        )
     )
