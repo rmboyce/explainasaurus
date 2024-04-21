@@ -1,17 +1,23 @@
 import reflex as rx
 from website.state import State
 
-
 def sidebar_chat(hist: str) -> rx.Component:
     """A sidebar chat item.
 
     Args:
         chat: The chat item.
     """
-    return  rx.drawer.close(rx.vstack(
-        rx.text(hist["link"]),
-        rx.text(hist["selected"]),
-        rx.text(hist["response"])))
+    return rx.vstack(
+        rx.checkbox(
+          spacing="2",
+          on_change=lambda x : State.change_summary(x, hist["response"])
+        ),
+        rx.hstack(rx.text("link:", font_weight="bold"), rx.text(hist["link"]),),
+        rx.hstack(rx.text("text:", font_weight="bold"), rx.text(hist["selected"]),),
+        rx.hstack(rx.text("explanation:", font_weight="bold"), rx.text(hist["response"]),),
+        border="2px solid black",
+        border_radius="10px",
+        padding="20px")
 
 
 def sidebar(trigger) -> rx.Component:
@@ -22,11 +28,13 @@ def sidebar(trigger) -> rx.Component:
         rx.drawer.portal(
             rx.drawer.content(
                 rx.vstack(
-                    rx.heading("Chats", color=rx.color("mauve", 11)),
+                    rx.heading("History", color=rx.color("mauve", 11)),
                     rx.divider(size="4"),
+                    rx.hstack(rx.drawer.close(rx.button("find similar articles", on_click=State.generate_relativearticles(), disabled=State.empty_list), float="left"), rx.drawer.close(rx.button("generate summary", on_click=State.generate_summary(), disabled=State.empty_list), float="right"), width="100%", display="block"),
                     rx.foreach(State.shistory, lambda hist: sidebar_chat(hist)),
                     align_items="stretch",
                     width="100%",
+                    overflow_y="auto"
                 ),
                 top="auto",
                 right="auto",

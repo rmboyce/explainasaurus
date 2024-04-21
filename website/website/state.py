@@ -53,8 +53,31 @@ class State(rx.State):
     # history of explanations
     shistory : list[dict[str, str]]= []
 
+    summarylist : list[str] = []
+
     # new explanation
     expl = "Default expl"
+
+    summary: str = ""
+
+    relativearticles: str = ""
+
+    def change_summary(self, checked: bool, response: str):
+        if(checked):
+            self.summarylist.append(response)
+        else:
+            self.summarylist.remove(response)
+        rx.console_log(self.summarylist)
+
+    def generate_summary(self):
+        self.summary = "GENERATED"
+
+    def generate_relativearticles(self):
+        self.relativearticles = "GENERATED"
+
+    @rx.var
+    def empty_list(self) -> bool:
+        return (len(self.summarylist)==0)
 
     def set_hist(self):
         self.shistory = history

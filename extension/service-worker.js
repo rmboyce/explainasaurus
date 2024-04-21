@@ -15,7 +15,7 @@ function addSidePage() {
     console.log(document.body.style.display);
     document.body.style.display = "grid";
     document.body.style.gridTemplateColumns = "67% 33%";
-    document.body.style.gap = "10px";
+    // document.body.style.gap = "10px";
     const elements = document.querySelectorAll("body > *");
     let i = 0;
     elements.forEach((element) => {
@@ -36,7 +36,7 @@ function addSidePage() {
     // explainerContainer.style.display = "flex";
     // existingContentWrapper.style.width = "67%";
 
-    sidePanel.style.width = "90%";
+    sidePanel.style.width = "100%";
     sidePanel.style.border = "2px solid black";
     sidePanel.style.display = "flex";
     sidePanel.style.justifyContent = "center";

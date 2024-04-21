@@ -2,13 +2,15 @@
 
 import reflex as rx
 from website.components import navbar, pdf
-from website.state import api_test
+from website.state import State, api_test
 
 def index() -> rx.Component:
     """The main app."""
     return rx.chakra.vstack(
         navbar(),
         pdf.pdf_upload(),
+        rx.cond(State.summary != "", rx.text(State.summary )),
+        rx.cond(State.relativearticles != "", rx.text(State.relativearticles)),
         background_color=rx.color("mauve", 12),
         color=rx.color("mauve", 1),
         min_height="100vh",
