@@ -28,7 +28,7 @@ def sidebar(trigger) -> rx.Component:
         rx.drawer.portal(
             rx.drawer.content(
                 rx.vstack(
-                    rx.heading("History", color=rx.color("mauve", 11)),
+                    rx.heading("History", color=rx.color("slate", 11)),
                     rx.divider(size="4"),
                     rx.hstack(rx.drawer.close(rx.button("find similar articles", on_click=State.generate_relativearticles(), disabled=State.empty_list), float="left"), rx.drawer.close(rx.button("generate summary", on_click=State.generate_summary(), disabled=State.empty_list), float="right"), width="100%", display="block"),
                     rx.foreach(State.shistory, lambda hist: sidebar_chat(hist)),
@@ -41,7 +41,7 @@ def sidebar(trigger) -> rx.Component:
                 height="100%",
                 width="90%",
                 padding="2em",
-                background_color=rx.color("mauve", 2),
+                background_color=rx.color("slate", 2),
                 outline="none",
             )
         ),
@@ -66,7 +66,7 @@ def modal(trigger) -> rx.Component:
                         on_click=State.create_chat,
                     ),
                 ),
-                background_color=rx.color("mauve", 1),
+                background_color=rx.color("slate", 1),
                 spacing="2",
                 width="100%",
             ),
@@ -84,7 +84,7 @@ def navbar():
                         color=rx.color("indigo", 1),
                     ),
                     on_click=State.set_uploaded(False),
-                    background_color=rx.color("mauve", 11)
+                    background_color=rx.color("slate", 10)
                 ),
                 align_items="center",
             ),
@@ -94,11 +94,12 @@ def navbar():
                     rx.button(
                         rx.icon(
                             tag="messages-square",
-                            color=rx.color("mauve", 12),
                         ),
-                        background_color=rx.color("mauve", 8),
                         on_click=State.set_hist(),
                     )
+                ),
+                rx.color_mode.button(
+                    rx.color_mode.icon()
                 ),
                 align_items="center",
             ),
@@ -108,8 +109,8 @@ def navbar():
         backdrop_filter="auto",
         backdrop_blur="lg",
         padding="12px",
-        border_bottom=f"1px solid {rx.color('mauve', 6)}",
-        background_color=rx.color("mauve", 11),
+        border_bottom=f"5px solid {rx.color('slate', 8)}",
+        background_color=rx.color("slate", 10),
         position="sticky",
         top="0",
         z_index="100",
